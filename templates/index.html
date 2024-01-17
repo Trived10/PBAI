@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</head>
+
+<body>
+
+    <section class="container mt-5">
+        <div class="row">
+            <div class="col">
+                <input type="file" id="fileInput" onchange="onFileSelected(event)" class="form-control">
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-4">
+                <div class="card-body">
+                    <img id="previewImage1" alt="Selected Image Preview" class="img-fluid d-none">
+                    <br>
+                    <button class="btn btn-secondary mt-2" id="btnPreviewImage1">Best First</button>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card-body">
+                    <img id="previewImage2" alt="Selected Image Preview" class="img-fluid d-none">
+                    <br>
+                    <button class="btn btn-secondary mt-2" id="btnPreviewImage2">Best Second</button>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card-body">
+                    <img id="previewImage3" alt="Selected Image Preview" class="img-fluid d-none">
+                    <br>
+                    <button class="btn btn-secondary mt-2" id="btnPreviewImage3">Best Third</button>
+                </div>
+            </div>
+<br>
+            <div class="row mt-2">
+                <div class="col-4">
+            <div id="result-container1" style="display: none;">
+                <h2>Object Detection Result</h2>
+                <p id="result-path1"></p>
+                <img id="result-image1" style="max-width: 100%;">
+            </div>
+        </div>
+        <div class="col-4">
+            <div id="result-container2" style="display: none;">
+                <h2>Object Detection Result</h2>
+                <p id="result-path2"></p>
+                <img id="result-image2" style="max-width: 100%;">
+            </div>
+        </div>
+        <div class="col-4">
+            <div id="result-container3" style="display: none;">
+                <h2>Object Detection Result</h2>
+                <p id="result-path3"></p>
+                <img id="result-image3" style="max-width: 100%;">
+            </div>
+        </div>
+        </div>
+
+        </div>
+    </section>
+
+    <script>
+        function onFileSelected(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                document.getElementById("previewImage1").classList.remove("d-none");
+                document.getElementById("previewImage2").classList.remove("d-none");
+                document.getElementById("previewImage3").classList.remove("d-none");
+
+
+                selectedImage = file;
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    imagePreview = reader.result;
+                    document.getElementById('previewImage1').src = imagePreview;
+                    document.getElementById('previewImage2').src = imagePreview;
+                    document.getElementById('previewImage3').src = imagePreview;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        $(document).ready(function () {
+
+            $("#btnPreviewImage1").on("click", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData();
+                var inputFile = $('#fileInput')[0].files[0]; // Assuming your input element has id="fileInput"
+
+                formData.append('file', inputFile);
+
+                $.ajax({
+                    url: '/best_first',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        // Handle the success response
+                        $('#result-image1').attr('src', response);
+                        $('#result-container1').show();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+            });
+
+            $("#btnPreviewImage2").on("click", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData();
+                var inputFile = $('#fileInput')[0].files[0]; // Assuming your input element has id="fileInput"
+
+                formData.append('file', inputFile);
+
+                $.ajax({
+                    url: '/best_second',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        // Handle the success response
+                        $('#result-image2').attr('src', response);
+                        $('#result-container2').show();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+            });
+
+            $("#btnPreviewImage3").on("click", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData();
+                var inputFile = $('#fileInput')[0].files[0]; // Assuming your input element has id="fileInput"
+
+                formData.append('file', inputFile);
+
+                $.ajax({
+                    url: '/best_third',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        // Handle the success response
+                        $('#result-image3').attr('src', response);
+                        $('#result-container3').show();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+            });
+
+
+        });
+
+    </script>
+</body>
+
+</html>
